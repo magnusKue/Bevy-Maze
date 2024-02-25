@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_atmosphere::prelude::*;
-use bevy_basic_camera::{CameraController, CameraControllerPlugin};
+use bevy_basic_camera::CameraControllerPlugin;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
 
@@ -19,7 +19,7 @@ fn main() {
         .add_plugins(player::PlayerPlugin)
 
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
-        .add_plugins(RapierDebugRenderPlugin{enabled:true, ..default()})
+        .add_plugins(RapierDebugRenderPlugin{enabled:false, ..default()})
 
         .add_plugins(WorldInspectorPlugin::new())
         .add_systems(Startup, (
@@ -43,10 +43,10 @@ pub fn setup(
         ..default()
     });
     // camera
-    commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
-        ..default()
-    })
-    .insert(AtmosphereCamera::default())
-    .insert(CameraController::default());
+    // commands.spawn(Camera3dBundle {
+    //     transform: Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
+    //     ..default()
+    // })
+    // .insert(AtmosphereCamera::default())
+    // .insert(CameraController::default());
 }
