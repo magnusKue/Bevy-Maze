@@ -5,6 +5,8 @@ use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier3d::prelude::*;
 
 pub mod maze;
+pub mod player;
+
 fn main() {
     App::new()
         .add_plugins((
@@ -14,29 +16,30 @@ fn main() {
         ))
 
         .add_plugins(maze::MazePlugin)
+        .add_plugins(player::PlayerPlugin)
 
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
-        .add_plugins(RapierDebugRenderPlugin::default())
+        .add_plugins(RapierDebugRenderPlugin{enabled:true, ..default()})
 
         .add_plugins(WorldInspectorPlugin::new())
         .add_systems(Startup, (
             setup,
-            spawn_player
         ))
         .run();
 }
 
 /// set up a simple 3D scene
-fn setup(
+pub fn setup(
     mut commands: Commands,
 ) {
     // light
     commands.spawn(PointLightBundle {
         point_light: PointLight {
             shadows_enabled: true,
+            intensity: 1_000_000.0,
             ..default()
         },
-        transform: Transform::from_xyz(-1.6, 8.7, -10.5),
+        transform: Transform::from_xyz(-1.0, 8.7, -1.0),
         ..default()
     });
     // camera
@@ -46,28 +49,4 @@ fn setup(
     })
     .insert(AtmosphereCamera::default())
     .insert(CameraController::default());
-}
-
-
-
-fn spawn_player(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<StandardMaterial>>,
-) {
-    // player size
-    let pls = Vec3::new(0.3, 0.8, 0.3); 
-
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Cuboid::new(pls.x, pls.y, pls.z)),
-        material: materials.add(Color::RED),
-        transform: Transform::from_xyz(-5.1, 5.0, -10.0),
-        ..default()
-    })
-    .insert(Collider::cuboid(0.5 * pls.x, 0.5 * pls.y, 0.5 * pls.z))
-    .insert(Name::new("Player".to_string()))
-    .insert(RigidBody::Dynamic)
-    .insert(GravityScale(0.1))
-    .insert(LockedAxes::ROTATION_LOCKED_X | LockedAxes::ROTATION_LOCKED_Z)
-    .insert(Ccd::enabled());
 }
