@@ -1,0 +1,13 @@
+[package]
+name = "bevy_3d"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bevy = "0.13.0"
+bevy-inspector-egui = "0.23.2"
+bevy_atmosphere = "0.9.0"
+bevy_basic_camera = { git = "https://github.com/DGriffin91/bevy_basic_camera" }
+bevy_rapier3d = { version = "*", features = [ "simd-stable", "debug-render-3d" ] }
